@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ChecksService } from './checks.service';
 import { CreateCheckDto } from './dto/create-check.dto';
+import { QueryParamsCheckDto } from './dto/query-params-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 
 @Controller('checks')
@@ -13,8 +14,8 @@ export class ChecksController {
   }
 
   @Get()
-  findAll() {
-    return this.checksService.findAll();
+  findAll(@Query() query: QueryParamsCheckDto) {
+    return this.checksService.findAll(query);
   }
 
   @Patch(':id')

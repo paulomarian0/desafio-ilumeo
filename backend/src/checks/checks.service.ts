@@ -3,6 +3,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import * as dayjs from 'dayjs';
+import { QueryParamsCheckDto } from './dto/query-params-check.dto';
 
 @Injectable()
 export class ChecksService {
@@ -31,9 +32,14 @@ export class ChecksService {
     return payload;
   }
 
-  async findAll() {
+  async findAll(query: QueryParamsCheckDto) {
 
-    const payload = await this.prisma.check.findMany();
+    const payload = await this.prisma.check.findMany({
+      where: query,
+      orderBy: {
+        departureTime: 'desc'
+      }
+    });
 
     return payload;
   }
@@ -52,8 +58,8 @@ export class ChecksService {
     // the worked time is the difference in miliseconds from the entryTime to departureTime
     const duration = dayjs(departureTime).diff(dayjs(entryTime), 'seconds')
 
-    const time = new Date(1970, 0 , 1); //the initial time is 01 Jan 1970
-   
+    const time = new Date(1970, 0, 1); //the initial time is 01 Jan 1970
+
     time.setSeconds(duration);
 
     const workedHours = dayjs(time).subtract(3, 'hours').toDate()
