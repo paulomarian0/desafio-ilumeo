@@ -30,7 +30,7 @@ export class UsersService {
 
   async findAll() {
 
-    const payload = await this.prisma.user.findMany();
+    const payload = await this.prisma.user.findMany({});
 
     return payload;
   }
@@ -47,11 +47,23 @@ export class UsersService {
     return payload;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, data: UpdateUserDto) {
+
+    const payload = await this.prisma.user.update({
+      where: {id},
+      data
+    })
+
+    return payload;
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} user`;
+  
+    const payload = await this.prisma.user.delete({
+      where: {id}
+    })
+  
+    return payload;
   }
+
 }
