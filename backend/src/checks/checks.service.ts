@@ -11,10 +11,12 @@ export class ChecksService {
 
   async create(data: CreateCheckDto) {
 
+    const entryDay = dayjs(data.entryTime).toDate()
+
     const alreadyCheckedToday = await this.prisma.check.findFirst({
       where: {
         entryTime: {
-          equals: data.entryTime
+          equals: entryDay
         }
       }
     })
