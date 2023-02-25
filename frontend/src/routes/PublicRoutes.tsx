@@ -8,8 +8,8 @@ export default function PublicRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<CreateAccount />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<CreateAccount />} />
         <Route path="/*" element={<Login />} />
       </Routes>
     </BrowserRouter>

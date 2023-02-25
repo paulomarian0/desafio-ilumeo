@@ -5,7 +5,7 @@ import PublicRoutes from './routes/PublicRoutes'
 
 function App() {
 
-  const isLogged = false;
+  const isLogged = !!localStorage.getItem('token');
 
   return (
     <div className="App">
