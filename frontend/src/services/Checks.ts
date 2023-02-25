@@ -1,10 +1,8 @@
 import api  from "./axios";
 
-export async function GetChecks(data: any){
+export async function GetChecks(code: string){
 
-  const {code} = data
-
-  const payload = await api.get(`/users?code=${code}`)
+  const payload = await api.get(`/checks?code=${code}`)
   .then((res) => {
 
     return res.data;
