@@ -3,7 +3,6 @@ import { PrismaService } from 'prisma/prisma.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import * as dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 
 @Injectable()
 export class ChecksService {
@@ -48,9 +47,10 @@ export class ChecksService {
 
     const departureTime = dayjs(updateCheckDto.departureTime)
 
+    // the worked time is the difference in miliseconds from the entryTime to departureTime
     const duration = dayjs(departureTime).diff(dayjs(entryTime), 'seconds')
 
-    const time = new Date(1970, 0 , 1);
+    const time = new Date(1970, 0 , 1); //the initial time is 01 Jan 1970
    
     time.setSeconds(duration);
 

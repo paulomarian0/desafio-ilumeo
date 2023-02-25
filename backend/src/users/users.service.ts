@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as randomstring from 'randomstring';
 import * as bcrypt from 'bcrypt';
+import { QueryParamsUserDto } from './dto/query-params-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -28,9 +29,18 @@ export class UsersService {
     };
   }
 
-  async findAll() {
+  async findAll(params: QueryParamsUserDto) {
 
-    const payload = await this.prisma.user.findMany({});
+    if (params.id) {
+      params.id = +params.id
+    }
+
+    const payload = await this.prisma.user.findMany({
+      where: params,
+      include: {
+        checks: true
+      }
+    });
 
     return payload;
   }
@@ -50,7 +60,7 @@ export class UsersService {
   async update(id: number, data: UpdateUserDto) {
 
     const payload = await this.prisma.user.update({
-      where: {id},
+      where: { id },
       data
     })
 
@@ -58,11 +68,11 @@ export class UsersService {
   }
 
   async remove(id: number) {
-  
+
     const payload = await this.prisma.user.delete({
-      where: {id}
+      where: { id }
     })
-  
+
     return payload;
   }
 
