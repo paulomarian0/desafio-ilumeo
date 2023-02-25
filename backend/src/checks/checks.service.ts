@@ -24,11 +24,14 @@ export class ChecksService {
     return payload;
   }
 
-  async update(id: number, data: UpdateCheckDto) {
+  async update(id: number, updateCheckDto: UpdateCheckDto) {
 
     const payload = await this.prisma.check.update({
       where: { id },
-      data
+      data: {
+        ...updateCheckDto,
+        isWorking: false
+      }
     })
 
     return payload;
