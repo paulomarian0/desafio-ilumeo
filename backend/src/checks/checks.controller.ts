@@ -17,18 +17,13 @@ export class ChecksController {
     return this.checksService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.checksService.findOne(+id);
-  }
-
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCheckDto: UpdateCheckDto) {
-    return this.checksService.update(+id, updateCheckDto);
+  update(@Param('id') id: number, @Body() data: UpdateCheckDto) {
+    return this.checksService.update(+id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.checksService.remove(+id);
   }
 }

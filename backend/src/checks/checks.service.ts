@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'prisma/prisma.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 
 @Injectable()
 export class ChecksService {
-  create(createCheckDto: CreateCheckDto) {
-    return 'This action adds a new check';
+
+  constructor(private prisma: PrismaService) { }
+
+  async create(data: CreateCheckDto) {
+
+    const payload = await this.prisma.check.create({
+      data
+    })
+
+    return payload;
   }
 
-  findAll() {
-    return `This action returns all checks`;
+  async findAll() {
+
+    const payload = await this.prisma.check.findMany();
+
+    return payload;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} check`;
+  async update(id: number, data: UpdateCheckDto) {
+
+    const payload = await this.prisma.check.update({
+      where: { id },
+      data
+    })
+
+    return payload;
   }
 
-  update(id: number, updateCheckDto: UpdateCheckDto) {
-    return `This action updates a #${id} check`;
-  }
+  async remove(id: number) {
+    const payload = await this.prisma.check.delete({
+      where: { id }
+    })
 
-  remove(id: number) {
-    return `This action removes a #${id} check`;
+    return payload;
   }
 }

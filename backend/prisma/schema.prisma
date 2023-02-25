@@ -22,7 +22,7 @@ model User {
 model Check {
   id            Int      @id @default(autoincrement())
   entryTime     DateTime
-  departureTime DateTime
+  departureTime DateTime?
   isWorking     Boolean  @default(true)
   User          User?    @relation(fields: [userId], references: [id])
   userId        Int?
