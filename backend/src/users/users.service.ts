@@ -3,6 +3,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as randomstring from 'randomstring';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -13,16 +14,18 @@ export class UsersService {
 
     const code = randomstring.generate(8);
 
-    const payload = await this.prisma.user.create({
+    const data = {
+      ...createUserDto,
+      password: await bcrypt.hash(createUserDto.password, 10),
+      code
+    }
 
-      data: {
-        ...createUserDto,
-        code
-      }
+    const payload = await this.prisma.user.create({ data });
 
-    })
-
-    return payload;
+    return {
+      ...payload,
+      password: undefined,
+    };
   }
 
   async findAll() {
@@ -36,11 +39,19 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
+  async findByEmail(email: string) {
+    const payload = await this.prisma.user.findUnique({
+      where: { email }
+    })
+
+    return payload;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
- async remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} user`;
   }
 }
