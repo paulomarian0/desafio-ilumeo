@@ -11,4 +11,8 @@ border-radius: 4px;
 
 display: flex;
 justify-content: space-between;
+
+align-items: center;
+padding: 1rem;
+border: 2rem;
 `

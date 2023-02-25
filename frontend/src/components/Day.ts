@@ -16,4 +16,5 @@ line-height: 15px;
 text-align: center;
 
 color: #CFCFCF;
+
 `
