@@ -26,7 +26,11 @@ export class ChecksService {
       return "You already check in today!"
 
     const payload = await this.prisma.check.create({
-      data
+      data: {
+        ...data,
+        entryTime: dayjs(data.entryTime).subtract(3, 'hour').toDate()
+      }
+      
     })
 
     return payload;
