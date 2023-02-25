@@ -20,11 +20,11 @@ model User {
 }
 
 model Check {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   entryTime     DateTime
   departureTime DateTime?
-  workedHours DateTime?
-  isWorking     Boolean  @default(true)
-  User          User?    @relation(fields: [userId], references: [id])
-  userId        Int?
+  workedHours   DateTime?
+  isWorking     Boolean   @default(true)
+  User          User?     @relation(fields: [userCode], references: [code])
+  userCode      String?
 }
