@@ -14,7 +14,7 @@ export class ChecksService {
 
     const entryDay = dayjs(data.entryTime).toDate()
 
-    const alreadyCheckedToday = await this.prisma.check.findFirst({
+    const alreadyCheckedToday = await this.prisma.check.findMany({
       where: {
         entryTime: {
           equals: entryDay
@@ -22,8 +22,8 @@ export class ChecksService {
       }
     })
 
-    if (alreadyCheckedToday)
-      return "You already check in today!"
+    // if (alreadyCheckedToday)
+    //   return "You already check in today!"
 
     const payload = await this.prisma.check.create({
       data: {
