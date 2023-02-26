@@ -11,6 +11,8 @@ function AuthProvider({ children }: IAuthProvider) {
   const [userCode, setUserCode] = useState();
   const [lastCheckId, setLastCheckId] = useState();
   const [userName, setUserName] = useState();
+  const [workedHoursToday, setWorkedHoursToday] = useState<any>();
+  const [checkInTime, setCheckInTime] = useState<string>();
 
   return (
     <AuthContext.Provider value={{
@@ -21,7 +23,11 @@ function AuthProvider({ children }: IAuthProvider) {
       lastCheckId,
       setLastCheckId,
       userName,
-      setUserName
+      setUserName,
+      workedHoursToday,
+      setWorkedHoursToday,
+      checkInTime,
+      setCheckInTime
 
     }}>
       {children}

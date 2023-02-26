@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router";
 import { Button } from "../../components/Button";
 import { CheckField } from "../../components/CheckField";
 import { Day } from "../../components/Day";
@@ -11,28 +10,36 @@ import { AuthContext } from "../../context/AuthContext";
 import { CheckIn, CheckOut, GetChecks } from "../../services/Checks";
 import { ICheckType } from "../../types/ChecksType";
 import './styles.css';
+import moment from 'moment';
+import utc from 'dayjs/plugin/utc';
+import { UserName } from "../../components/UserName";
+
+dayjs.extend(utc)
 
 export function Checks() {
 
   const [check, setCheck] = useState<ICheckType[]>([]);
   const [isWorking, setIsWorking] = useState(false);
-  const { userCode, setUserCode, setLastCheckId, lastCheckId, userName, setUserName, setNeedUpdateList, needUpdateList } = useContext(AuthContext);
+  const { userCode, setUserCode, setLastCheckId, lastCheckId, userName, setUserName, setNeedUpdateList, workedHoursToday, setWorkedHoursToday, checkInTime, setCheckInTime } = useContext(AuthContext);
 
   useEffect(() => {
+
     setUserCode(localStorage.getItem('userCode'));
     setUserName(localStorage.getItem('userName'));
-    
-    getListOfChecks(userCode);
+    setWorkedHoursToday(localStorage.getItem('workedHours'));
 
-    setNeedUpdateList(false);
-  }, [needUpdateList])
+    getListOfChecks(userCode)
+
+  }, )
 
   function handleCheckIn() {
     const dateNow = dayjs(new Date).format("YYYY-MM-DDTHH:mm:ssZ")
 
-    console.log("hora do checkin", dateNow)
+    setCheckInTime(dateNow);
+
     CheckIn(dateNow, userCode)
       .then((res) => {
+        console.log(res)
         setLastCheckId(res.id)
       })
       .catch((err) => {
@@ -40,13 +47,13 @@ export function Checks() {
       })
 
     setIsWorking(true);
-
+    getListOfChecks(userCode);
     setNeedUpdateList(true);
   }
 
   function handleCheckOut() {
-
     const dateNow = dayjs(new Date).format("YYYY-MM-DDTHH:mm:ssZ")
+
     console.log("hora do cejhckout", dateNow)
 
     CheckOut(lastCheckId, dateNow)
@@ -55,8 +62,10 @@ export function Checks() {
       })
 
     setIsWorking(false);
-
+    getListOfChecks(userCode);
     setNeedUpdateList(true);
+
+    getTimeWorkedToday()
   }
 
   async function getListOfChecks(userCode: string) {
@@ -68,32 +77,51 @@ export function Checks() {
       })
   }
 
+  function getTimeWorkedToday() {
+
+    const initial = dayjs(checkInTime)
+    const final = dayjs(new Date)
+
+    const duration = dayjs(final).diff(dayjs(initial), 'seconds')
+
+    const time = new Date(1970, 0, 1); //the initial time is 01 Jan 1970
+
+    time.setSeconds(duration);
+
+    const workedHours = dayjs(time).toDate()
+
+    localStorage.setItem('workedHours', workedHours.toJSON())
+  }
+
   return (
     <div className="check-container">
+      {isWorking &&
+        <h3>Trabalhando... Último ponto batido a x minutos</h3>
+      }
       <Header>
-        <h1>{lastCheckId}</h1>
         <Typography size={"11.6px"}>Relógio de ponto</Typography>
-        <div>
-          <Typography size={"11.6px"}>{userCode}</Typography>
-          <Typography>{userName}</Typography>
+        <div style={{ textAlign: 'end' }}>
+          <Typography size={"11.6px"}>#{userCode}</Typography>
+          <UserName>{userName}</UserName>
         </div>
 
       </Header>
 
-      <Typography size={"23.2px"}>0h 00m</Typography>
+      <Typography size={"23.2px"}>{dayjs(workedHoursToday).format("HH:mm:ss")} h</Typography>
       <Typography size={"11.6px"}>Horas de hoje</Typography>
+      <button disabled={check.length > 0} onClick={() => getTimeWorkedToday()}>Refresh</button>
 
       {isWorking ?
-        <Button onClick={handleCheckOut}>Hora de saída</Button>
+        <Button disabled={check.length > 1} onClick={handleCheckOut}>Hora de saída</Button>
         :
-        <Button onClick={handleCheckIn}>Hora de entrada</Button>
+        <Button disabled={check.length > 0} onClick={handleCheckIn}>Hora de entrada</Button>
       }
 
       <Typography size={"10px"}>Dias anteriores</Typography>
       {check?.map((item: any) => (
-        <CheckField>
+        <CheckField key={item.id}>
           <Day>{dayjs(item.entryTime).format("DD/MM/YYYY")}</Day>
-          <Hour>{dayjs(item.workedHours).format(`hh:mm`)}</Hour>
+          <Hour>{moment(item.workedHours).utc().format(`HH:mm:ss`)}</Hour>
         </CheckField>
       ))}
 
