@@ -18,9 +18,9 @@ export class ChecksService {
 
   async create(createCheckDto: CreateCheckDto) {
 
-    const entryDay = dayjs(createCheckDto.entryTime).toDate()
+    const entryDay = dayjs((createCheckDto.entryTime)).toDate()
 
-    const alreadyCheckedToday = await this.prisma.check.findMany({
+    const alreadyCheckedToday = await this.prisma.check.findFirst({
       where: {
         entryTime: {
           equals: entryDay
@@ -28,15 +28,17 @@ export class ChecksService {
       }
     })
 
-    // if (alreadyCheckedToday)
-    //   return "You already check in today!"
+
+    if (alreadyCheckedToday)
+      return "You already check in today!"
+
     const convertedEntryTime = this.convertToUtc(dayjs(createCheckDto.entryTime).toDate())
 
     const payload = await this.prisma.check.create({
       data: {
         ...createCheckDto,
         entryTime: convertedEntryTime
-      }  
+      }
     })
 
     return payload;
@@ -63,9 +65,7 @@ export class ChecksService {
       }
     })
 
-    const departureTime = dayjs(updateCheckDto.departureTime)
-
-    this.convertToUtc(departureTime.toDate())
+    const departureTime = dayjs(updateCheckDto.departureTime).subtract(3, 'hours')
 
     // the worked time is the difference in miliseconds from the entryTime to departureTime
     const duration = dayjs(departureTime).diff(dayjs(entryTime), 'seconds')
@@ -80,6 +80,7 @@ export class ChecksService {
       where: { id },
       data: {
         ...updateCheckDto,
+        departureTime: departureTime.toDate(),
         isWorking: false,
         workedHours
       }
