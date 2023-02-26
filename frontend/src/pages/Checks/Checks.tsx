@@ -13,6 +13,8 @@ import './styles.css';
 import moment from 'moment';
 import utc from 'dayjs/plugin/utc';
 import { UserName } from "../../components/UserName";
+import { ArrowCounterClockwise } from "phosphor-react";
+import { notification } from "antd";
 
 dayjs.extend(utc)
 
@@ -28,9 +30,17 @@ export function Checks() {
     setUserName(localStorage.getItem('userName'));
     setWorkedHoursToday(localStorage.getItem('workedHours'));
 
-    getListOfChecks(userCode)
+    setTimeout(() => {
+      getListOfChecks(userCode);
+    }, 60000)
 
-  }, )
+    if (isWorking === false) {
+      localStorage.setItem('workedHours', "1970-01-01T03:00:00.000Z")
+    }
+
+    getTimeWorkedToday();
+
+  },)
 
   function handleCheckIn() {
     const dateNow = dayjs(new Date).format("YYYY-MM-DDTHH:mm:ssZ")
@@ -39,7 +49,6 @@ export function Checks() {
 
     CheckIn(dateNow, userCode)
       .then((res) => {
-        console.log(res)
         setLastCheckId(res.id)
       })
       .catch((err) => {
@@ -49,23 +58,25 @@ export function Checks() {
     setIsWorking(true);
     getListOfChecks(userCode);
     setNeedUpdateList(true);
+
+    notification.success({ message: 'Check In successfully!' });
+
   }
 
   function handleCheckOut() {
     const dateNow = dayjs(new Date).format("YYYY-MM-DDTHH:mm:ssZ")
-
-    console.log("hora do cejhckout", dateNow)
 
     CheckOut(lastCheckId, dateNow)
       .then((res) => {
         return res.data
       })
 
+    getTimeWorkedToday();
     setIsWorking(false);
-    getListOfChecks(userCode);
     setNeedUpdateList(true);
+    getListOfChecks(userCode);
 
-    getTimeWorkedToday()
+    notification.success({ message: 'Check Out successfully!' });
   }
 
   async function getListOfChecks(userCode: string) {
@@ -96,9 +107,13 @@ export function Checks() {
   return (
     <div className="check-container">
       {isWorking &&
-        <h3>Trabalhando... Último ponto batido a x minutos</h3>
+        <div style={{ marginBottom: '2rem' }}>
+          <Typography>Trabalhando...</Typography>
+          <br />
+          <Typography>Último ponto batido a {dayjs(checkInTime).format("DD/MM/YYYY HH:mm:ss")}</Typography>
+        </div>
       }
-      <Header>
+      <Header >
         <Typography size={"11.6px"}>Relógio de ponto</Typography>
         <div style={{ textAlign: 'end' }}>
           <Typography size={"11.6px"}>#{userCode}</Typography>
@@ -107,21 +122,24 @@ export function Checks() {
 
       </Header>
 
-      <Typography size={"23.2px"}>{dayjs(workedHoursToday).format("HH:mm:ss")} h</Typography>
+      <Typography size={"23.2px"}>{(dayjs(workedHoursToday).format("HH:mm"))} h</Typography>
       <Typography size={"11.6px"}>Horas de hoje</Typography>
-      <button disabled={check.length > 0} onClick={() => getTimeWorkedToday()}>Refresh</button>
 
       {isWorking ?
-        <Button disabled={check.length > 1} onClick={handleCheckOut}>Hora de saída</Button>
+        <Button onClick={handleCheckOut}>Hora de saída</Button>
         :
-        <Button disabled={check.length > 0} onClick={handleCheckIn}>Hora de entrada</Button>
+        <Button onClick={handleCheckIn}>Hora de entrada</Button>
       }
 
       <Typography size={"10px"}>Dias anteriores</Typography>
+      <i style={{ color: 'white' }} onClick={() => getListOfChecks(userCode)}>
+        <ArrowCounterClockwise size={32} />
+      </i>
+
       {check?.map((item: any) => (
         <CheckField key={item.id}>
           <Day>{dayjs(item.entryTime).format("DD/MM/YYYY")}</Day>
-          <Hour>{moment(item.workedHours).utc().format(`HH:mm:ss`)}</Hour>
+          <Hour>{moment(item.workedHours).utc().format(`HH:mm:ss`)} h</Hour>
         </CheckField>
       ))}
 

@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@types/styled-components": "^5.1.26",
+    "antd": "^5.2.2",
     "axios": "^1.3.4",
     "dayjs": "^1.11.7",
+    "moment": "^2.29.4",
+    "phosphor": "^0.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.2",

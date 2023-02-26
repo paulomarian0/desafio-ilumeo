@@ -7,6 +7,7 @@ import { ILoginRequestType } from "../../types/ILoginRequestType";
 import { LoginRequest } from "../../services/Login";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { Typography } from "../../components/Typography";
 
 export function Login() {
   const { register, handleSubmit } = useForm();
@@ -29,14 +30,14 @@ export function Login() {
 
   return (
     <div className="login-container">
-      <h1>Login</h1>
+      <Typography size={"30px"}>Login</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input type="text" placeholder="email" {...register("email", {})} />
         <Input type="password" placeholder="password" {...register("password", {})} />
 
         <Button type="submit" >Login</Button>
       </form>
-      <a>Create account</a>
+      <Typography onClick={() => navigate("/register") }>Create account</Typography>
     </div>
   )
 }

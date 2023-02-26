@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const CheckField = styled.div`
-width: 365px;
+width: 380px;
 height: 41px;
 left: 459px;
 top: 274px;
@@ -15,4 +15,5 @@ justify-content: space-between;
 align-items: center;
 padding: 1rem;
 border: 2rem;
+margin: 1rem 0;
 `

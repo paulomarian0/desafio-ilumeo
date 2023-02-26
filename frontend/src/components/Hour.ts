@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Hour = styled.h3`
-width: 47px;
+
 height: 15px;
 left: 755px;
 top: 287px;

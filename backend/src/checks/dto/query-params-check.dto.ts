@@ -1,4 +1,5 @@
 export class QueryParamsCheckDto {
   id?: number
-  userCode: string
+  userCode?: string
+  isWorking?: boolean
 }

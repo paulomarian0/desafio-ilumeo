@@ -18,4 +18,5 @@ font-weight: 700;
 font-size: ${props => props.size};
 line-height: 14px;
 color: #F5F5F5;
+
 `

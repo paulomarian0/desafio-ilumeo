@@ -18,20 +18,6 @@ export class ChecksService {
 
   async create(createCheckDto: CreateCheckDto) {
 
-    const entryDay = dayjs((createCheckDto.entryTime)).toDate()
-
-    const alreadyCheckedToday = await this.prisma.check.findFirst({
-      where: {
-        entryTime: {
-          equals: entryDay
-        }
-      }
-    })
-
-
-    if (alreadyCheckedToday)
-      return "You already check in today!"
-
     const convertedEntryTime = this.convertToUtc(dayjs(createCheckDto.entryTime).toDate())
 
     const payload = await this.prisma.check.create({
@@ -45,6 +31,10 @@ export class ChecksService {
   }
 
   async findAll(query: QueryParamsCheckDto) {
+
+    if (query.isWorking) {
+      query.isWorking = !query.isWorking
+    }
 
     const payload = await this.prisma.check.findMany({
       where: query,
