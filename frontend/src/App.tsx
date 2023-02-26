@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import AuthProvider from './context/AuthContext';
 import PrivatedRoute from './routes/PrivatedRoutes'
 import PublicRoutes from './routes/PublicRoutes'
 
@@ -10,13 +11,13 @@ function App() {
   return (
     <div className="App">
 
-      {isLogged ? (
-        <PrivatedRoute />
-      ) :
-        <PublicRoutes />
-      }
-
-
+      <AuthProvider>
+        {isLogged ? (
+          <PrivatedRoute />
+        ) :
+          <PublicRoutes />
+        }
+      </AuthProvider>
     </div>
   )
 }

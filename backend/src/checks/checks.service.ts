@@ -3,6 +3,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { UpdateCheckDto } from './dto/update-check.dto';
 import * as dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { QueryParamsCheckDto } from './dto/query-params-check.dto';
 
 @Injectable()
@@ -10,9 +11,14 @@ export class ChecksService {
 
   constructor(private prisma: PrismaService) { }
 
-  async create(data: CreateCheckDto) {
+  convertToUtc(date: Date) {
 
-    const entryDay = dayjs(data.entryTime).toDate()
+    return dayjs(date).subtract(3, 'hours').toDate()
+  }
+
+  async create(createCheckDto: CreateCheckDto) {
+
+    const entryDay = dayjs(createCheckDto.entryTime).toDate()
 
     const alreadyCheckedToday = await this.prisma.check.findMany({
       where: {
@@ -24,13 +30,13 @@ export class ChecksService {
 
     // if (alreadyCheckedToday)
     //   return "You already check in today!"
+    const convertedEntryTime = this.convertToUtc(dayjs(createCheckDto.entryTime).toDate())
 
     const payload = await this.prisma.check.create({
       data: {
-        ...data,
-        entryTime: dayjs(data.entryTime).subtract(3, 'hour').toDate()
-      }
-      
+        ...createCheckDto,
+        entryTime: convertedEntryTime
+      }  
     })
 
     return payload;
@@ -50,7 +56,7 @@ export class ChecksService {
 
   async update(id: number, updateCheckDto: UpdateCheckDto) {
 
-    const { entryTime } = await this.prisma.check.findFirst({
+    const { entryTime } = await this.prisma.check.findUnique({
       where: { id },
       select: {
         entryTime: true
@@ -58,6 +64,8 @@ export class ChecksService {
     })
 
     const departureTime = dayjs(updateCheckDto.departureTime)
+
+    this.convertToUtc(departureTime.toDate())
 
     // the worked time is the difference in miliseconds from the entryTime to departureTime
     const duration = dayjs(departureTime).diff(dayjs(entryTime), 'seconds')

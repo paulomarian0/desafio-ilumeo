@@ -1,4 +1,4 @@
 export class CreateCheckDto {
-  entryTime: string
+  entryTime: string | Date | any
   userCode: string
 }

@@ -1,8 +1,13 @@
 export interface ICheckType {
   id: number
-  entryTime: string
+  entryTime: Date
   departureTime: string
   workedHours: string
   isWorking: boolean
-  userId: number
+  userCode: string
+}
+
+export interface ICheckInType {
+  entryTime: Date
+  userCode: string
 }
