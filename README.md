@@ -18,7 +18,22 @@ git clone https://github.com/paulomarian0/desafio-ilumeo
 cd desafio-ilumeo
 ```
 
+### Baixando o .env
+
+Entre no link abaixo e faça o download do arquivo
+
+```
+https://drive.google.com/file/d/1uqjrj-U9UK2UIWk9VI7yCV2d2EddxuEX/view?usp=sharing
+```
+
+Mova esse arquivo baixado para o diretório: 
+
+```
+cd backend
+```
+
 ### Rodando o backend (necessário docker instalado)
+
 ```
 cd backend
 
