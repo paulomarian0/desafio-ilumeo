@@ -5,6 +5,7 @@ import { Input } from '../../components/Input';
 import { CreateAccountRequest } from '../../services/User';
 import './styles.css';
 import {notification} from 'antd';
+import { Typography } from '../../components/Typography';
 
 export function CreateAccount() {
 
@@ -31,6 +32,7 @@ export function CreateAccount() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <Typography size={"40px"}>Create Account</Typography>
       <Input type="text" placeholder="name" {...register("name", {})} />
       <Input type="text" placeholder="email" {...register("email", {})} />
       <Input type="password" placeholder="password" {...register("password", {})} />

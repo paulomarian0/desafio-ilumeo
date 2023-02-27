@@ -8,6 +8,7 @@ import { LoginRequest } from "../../services/Login";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Typography } from "../../components/Typography";
+import { notification } from "antd";
 
 export function Login() {
   const { register, handleSubmit } = useForm();
@@ -25,6 +26,9 @@ export function Login() {
         navigate("/pontoilumeo")
 
         window.location.reload();
+      })
+      .catch((err) => {
+        notification.error({ message: err.response.data.message });
       })
   }
 

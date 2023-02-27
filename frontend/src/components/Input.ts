@@ -15,8 +15,18 @@ font-size: 21.6px;
 line-height: 26px;
 
 color: #FFFFFF;
+padding: 2rem 0.5rem;
 
 &::placeholder {
-       color: green;
+       
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 300;
+font-size: 12px;
+line-height: 15px;
+/* identical to box height */
+
+color: #FFFFFF;
 }
+
 `;

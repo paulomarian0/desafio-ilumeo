@@ -18,6 +18,14 @@
   flex-direction: column;
 }
 
+a{
+  color: white;
+}
+
+a:visited{
+  color: white;
+}
+
 .ponto-ilumeo{
   height: 26px;
   left: 457px;

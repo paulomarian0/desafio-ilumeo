@@ -22,6 +22,7 @@ export function Checks() {
 
   const [check, setCheck] = useState<ICheckType[]>([]);
   const [isWorking, setIsWorking] = useState(false);
+  const [stopUpdate, setsTopUpdate] = useState(true);
   const { userCode, setUserCode, setLastCheckId, lastCheckId, userName, setUserName, setNeedUpdateList, workedHoursToday, setWorkedHoursToday, checkInTime, setCheckInTime } = useContext(AuthContext);
 
   useEffect(() => {
@@ -30,10 +31,13 @@ export function Checks() {
     setUserName(localStorage.getItem('userName'));
     setWorkedHoursToday(localStorage.getItem('workedHours'));
 
-    setTimeout(() => {
-      getListOfChecks(userCode);
-    }, 60000)
+    if(stopUpdate){
 
+      setTimeout(() => {
+        getListOfChecks(userCode);
+      }, 60000)
+      
+    }
     if (isWorking === false) {
       localStorage.setItem('workedHours', "1970-01-01T03:00:00.000Z")
     }
@@ -77,6 +81,8 @@ export function Checks() {
     getListOfChecks(userCode);
 
     notification.success({ message: 'Check Out successfully!' });
+
+    setsTopUpdate(false)
   }
 
   async function getListOfChecks(userCode: string) {
