@@ -22,9 +22,7 @@ cd desafio-ilumeo
 
 Entre no link abaixo e faça o download do arquivo
 
-```
 https://drive.google.com/file/d/1uqjrj-U9UK2UIWk9VI7yCV2d2EddxuEX/view?usp=sharing
-```
 
 Mova esse arquivo baixado para o diretório: 
 
@@ -65,7 +63,7 @@ npm run dev
 ```
 Necessário instalar o docker para rodar o banco de dados localmente
 ```
-
+https://www.youtube.com/watch?v=y-2twCDgkA0
 ## 🛠️ Construído com
 
 Mencione as ferramentas que você usou para criar seu projeto
@@ -74,5 +72,10 @@ Mencione as ferramentas que você usou para criar seu projeto
 * [ReactJS](https://pt-br.reactjs.org) - Framework frontend usado
 * [Prisma.io](https://www.prisma.io) - ORM usado
 
+## ➕ Extras
+
+Vídeo no Youtube explicando um pouco do projeto:
+<br/>
+https://www.youtube.com/watch?v=y-2twCDgkA0
 ---
 ⌨️ com ❤️ por [Paulo Mariano](https://github.com/paulomarian0) 😊
