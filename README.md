@@ -63,7 +63,6 @@ npm run dev
 ```
 Necessário instalar o docker para rodar o banco de dados localmente
 ```
-https://www.youtube.com/watch?v=y-2twCDgkA0
 ## 🛠️ Construído com
 
 Mencione as ferramentas que você usou para criar seu projeto
